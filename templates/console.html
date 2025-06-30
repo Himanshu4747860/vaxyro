@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VX-Console</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body { background: #0f172a; color: #0ff; font-family: monospace; padding: 2rem; }
+    #output { white-space: pre-wrap; background: #000; padding: 1rem; border-radius: 8px; margin-top: 1rem; height: 300px; overflow-y: auto; }
+    input { width: 100%; padding: 1rem; border-radius: 8px; margin-top: 1rem; background: #111; color: #0ff; border: 1px solid #0ff; }
+  </style>
+</head>
+<body>
+  <h1>VX-Console (Cloud-Termux)</h1>
+  <input id="command" placeholder="Enter command..." autofocus>
+  <div id="output">Output will appear here...</div>
+
+  <script>
+    const cmdInput = document.getElementById('command');
+    const outputBox = document.getElementById('output');
+
+    cmdInput.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const command = cmdInput.value;
+        outputBox.innerText = "Running: " + command;
+        const res = await fetch('/run', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({command})
+        });
+        const data = await res.json();
+        outputBox.innerText = data.output;
+        cmdInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
