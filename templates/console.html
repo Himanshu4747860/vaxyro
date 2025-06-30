@@ -1,36 +1,54 @@
+<!-- templates/console.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>VX-Console</title>
-  <link rel="stylesheet" href="/static/style.css">
   <style>
-    body { background: #0f172a; color: #0ff; font-family: monospace; padding: 2rem; }
-    #output { white-space: pre-wrap; background: #000; padding: 1rem; border-radius: 8px; margin-top: 1rem; height: 300px; overflow-y: auto; }
-    input { width: 100%; padding: 1rem; border-radius: 8px; margin-top: 1rem; background: #111; color: #0ff; border: 1px solid #0ff; }
+    body {
+      background-color: #0f172a;
+      color: #00ffff;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #console {
+      background-color: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    input {
+      background-color: #0f172a;
+      color: #00ffff;
+      border: 1px solid #00ffff;
+      padding: 5px;
+      width: 90%;
+    }
   </style>
 </head>
 <body>
-  <h1>VX-Console (Cloud-Termux)</h1>
-  <input id="command" placeholder="Enter command..." autofocus>
-  <div id="output">Output will appear here...</div>
+  <h2>VX-Console</h2>
+  <div id="console">
+    <pre id="output">Type a command and press Enter...</pre>
+    <input type="text" id="command" placeholder="Enter command" />
+  </div>
 
   <script>
-    const cmdInput = document.getElementById('command');
-    const outputBox = document.getElementById('output');
+    const input = document.getElementById('command');
+    const output = document.getElementById('output');
 
-    cmdInput.addEventListener('keydown', async (e) => {
+    input.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter') {
-        const command = cmdInput.value;
-        outputBox.innerText = "Running: " + command;
+        const cmd = input.value;
+        output.textContent += `\n> ${cmd}\n`;
+        input.value = '';
+
         const res = await fetch('/run', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({command})
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: cmd }),
         });
         const data = await res.json();
-        outputBox.innerText = data.output;
-        cmdInput.value = '';
+        output.textContent += data.output;
       }
     });
   </script>
