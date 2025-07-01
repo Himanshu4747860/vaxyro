@@ -3,95 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ToolVerse is the ultimate ethical hacking toolkit platform offering animated 3D UI, instant tools, and a sleek user experience for cybersecurity professionals." />
-  <meta name="keywords" content="ethical hacking, cybersecurity tools, 3D UI, animated background, hacking platform, subdomain finder, port scanner, XSS tester, CVE lookup, header analyzer" />
-  <meta name="author" content="ToolVerse Team" />
-  <title>Vaxyro | 3D Cybersecurity Toolkit</title>
+  <title>Vaxyro - Cybersecurity Platform</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <!-- ✅ Google Analytics Tracking Code -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7Z784KHND"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P7Z784KHND');
+  </script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Background Style -->
+  <!-- Orbitron Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      margin: 0;
+      background-color: #0f172a;
       font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(#0f172a, #020617);
-      color: #ffffff;
-      overflow-x: hidden;
+      color: #00ffff;
     }
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
+    .tool-button {
+      background-color: #1e293b;
+      border: 1px solid #00ffff;
+      padding: 12px;
+      border-radius: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tool-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ffff;
     }
   </style>
 </head>
-<body>
-  <!-- 3D Canvas Background -->
-  <canvas id="bg"></canvas>
+<body class="p-4">
 
-  <!-- Header & Intro -->
-  <div class="text-center py-20 px-5">
-    <h1 class="text-4xl md:text-6xl font-bold text-cyan-400 animate-pulse">Vaxyro</h1>
-    <p class="text-lg md:text-xl mt-4 text-cyan-200">Explore a futuristic cybersecurity world with 3D animations and glowing tools inside an immersive UI.</p>
-  </div>
+  <header class="text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-cyan-400 mb-2">Vaxyro</h1>
+    <p class="text-lg md:text-xl mt-4 text-cyan-200">
+      Explore a futuristic cybersecurity world with 3D animations and glowing tools in Vaxyro Console.
+    </p>
+  </header>
 
-  <!-- Tool Buttons -->
-  <div class="flex flex-wrap justify-center gap-4 px-4 pb-20">
-    <a href="/subdomain" class="bg-gradient-to-r from-green-400 to-blue-500 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Subdomain Finder</a>
-    <a href="/portscan" class="bg-gradient-to-r from-blue-400 to-purple-500 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Port Scanner</a>
-    <a href="/xss" class="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">XSS Tester</a>
-    <a href="/cve" class="bg-gradient-to-r from-yellow-400 to-red-500 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">CVE Lookup</a>
-    <a href="/headers" class="bg-gradient-to-r from-teal-400 to-indigo-500 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Header Analyzer</a>
+  <main class="mt-10 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <a href="/subdomain" class="tool-button text-center">🔍 Subdomain Finder</a>
+    <a href="/portscan" class="tool-button text-center">🔌 Port Scanner</a>
+    <a href="/xss" class="tool-button text-center">⚔️ XSS Tester</a>
+    <a href="/cve" class="tool-button text-center">🛡️ CVE Lookup</a>
+    <a href="/headers" class="tool-button text-center">📡 Header Analyzer</a>
+    <a href="/console" class="tool-button text-center">💻 VX-Console</a>
+  </main>
 
-    <!-- ✅ VX-Console Button -->
-    <a href="/console" class="bg-gradient-to-r from-slate-600 to-zinc-800 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">VX-Console</a>
-  </div>
+  <footer class="text-center mt-10 text-sm text-cyan-400">
+    &copy; 2025 Vaxyro | Built for cybersecurity
+  </footer>
 
-  <!-- JavaScript for 3D Particles -->
-  <script>
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d');
-    let w, h, particles;
-
-    function init() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      particles = [];
-      for (let i = 0; i < 150; i++) {
-        particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          radius: Math.random() * 2,
-          dx: (Math.random() - 0.5) * 1,
-          dy: (Math.random() - 0.5) * 1
-        });
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, w, h);
-      for (let p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#0ff';
-        ctx.fill();
-        p.x += p.dx;
-        p.y += p.dy;
-        if (p.x < 0 || p.x > w) p.dx *= -1;
-        if (p.y < 0 || p.y > h) p.dy *= -1;
-      }
-      requestAnimationFrame(draw);
-    }
-
-    window.addEventListener('resize', init);
-    init();
-    draw();
-  </script>
 </body>
 </html>
