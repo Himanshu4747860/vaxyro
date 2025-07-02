@@ -1,16 +1,15 @@
 import socket
 
-def run_port_scanner(host):
+def scan_ports(target):
     open_ports = []
-    common_ports = [21, 22, 23, 25, 53, 80, 110, 443, 8080]
-    for port in common_ports:
+    for port in [21, 22, 23, 80, 443, 3306]:
         try:
-            sock = socket.socket()
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(0.5)
-            result = sock.connect_ex((host, port))
+            result = sock.connect_ex((target, port))
             if result == 0:
-                open_ports.append(port)
+                open_ports.append(f"Port {port} is open")
             sock.close()
         except:
-            pass
-    return open_ports
+            continue
+    return open_ports or ["No open ports found."]

@@ -9,13 +9,24 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 def index():
     return render_template('index.html')
 
-# ---------- Subdomain Finder ----------
+# ---------- Subdomain Finder (Real API) ----------
 @app.route('/subdomain', methods=['GET', 'POST'])
 def subdomain_tool():
     if request.method == 'POST':
         target = request.form.get('target')
-        subdomains = [f"mail.{target}", f"admin.{target}", f"dev.{target}"]
-        return render_template('tool_result.html', tool="Subdomain Finder", target=target, result=subdomains)
+        try:
+            res = requests.get(f"https://api.hackertarget.com/hostsearch/?q={target}")
+            if res.status_code == 200:
+                lines = res.text.strip().split('\n')
+                subdomains = [line.split(',')[0] for line in lines if line]
+                if subdomains:
+                    return render_template('tool_result.html', tool="Subdomain Finder", target=target, result=subdomains)
+                else:
+                    return render_template('tool_result.html', tool="Subdomain Finder", target=target, result=["No subdomains found."])
+            else:
+                return render_template('tool_result.html', tool="Subdomain Finder", target=target, result=["API request failed."])
+        except Exception as e:
+            return render_template('tool_result.html', tool="Subdomain Finder", target=target, result=[f"Error: {str(e)}"])
     return render_template('tool_form.html', title="Subdomain Finder")
 
 # ---------- Port Scanner ----------

@@ -1,22 +1,42 @@
-
-
+<!-- templates/tool_result.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ tool }} Results | Vaxyro</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(#0f172a, #020617);
+      font-family: 'Orbitron', sans-serif;
+      color: #ffffff;
+      padding: 2rem;
+    }
+    a {
+      color: #0ff;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <div class="result-page">
-    <h2>{{ tool }} Results for <span>{{ target }}</span></h2>
-    <div class="result-cards">
-      {% for item in result %}
-        <div class="result-card">🔍 {{ item }}</div>
-      {% endfor %}
-    </div>
-    <a class="back-button" href="/">Back to Home</a>
+  <h1 class="text-3xl text-cyan-400 mb-4">{{ tool }} Results</h1>
+  <p class="text-lg text-cyan-200 mb-6">Target: {{ target }}</p>
+
+  <ul class="space-y-2">
+    {% for item in result %}
+      <li>
+        {% if tool == "Subdomain Finder" and item.startswith('http') %}
+          <a href="{{ item }}" target="_blank" rel="noopener noreferrer">{{ item }}</a>
+        {% else %}
+          {{ item }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="mt-6">
+    <a href="/" class="text-cyan-300 hover:underline">← Back to Home</a>
   </div>
 </body>
 </html>
