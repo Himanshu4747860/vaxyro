@@ -8,6 +8,9 @@ from tools.firewall_test import test_firewall
 from tools.geo_ip import geo_ip_lookup
 from tools.cms_detector import detect_cms
 from tools.ai_vulnerability_scanner import ai_vulnerability_scan
+from tools.sqlmap import sql_injection_test
+from tools.aircrack import wifi_security_test
+from tools.drozer import mobile_security_test
 import socket
 import subprocess
 import requests
@@ -28,8 +31,18 @@ TOOL_CATEGORIES = {
     },
     'web': {
         'name': 'Web Application Security',
-        'description': 'Tools for analyzing web applications',
-        'tools': ['xss', 'cms', 'headers', 'vulnscan']
+        'description': 'Tools for analyzing web applications and exploiting vulnerabilities',
+        'tools': ['xss', 'cms', 'headers', 'vulnscan', 'sqlmap']
+    },
+    'wifi': {
+        'name': 'WiFi Security Testing',
+        'description': 'Professional WiFi security assessment and penetration testing',
+        'tools': ['aircrack', 'wifite', 'fluxion']
+    },
+    'mobile': {
+        'name': 'Mobile Security Testing',
+        'description': 'Android and iOS application security assessment tools',
+        'tools': ['drozer', 'frida', 'mobsf']
     },
     'intelligence': {
         'name': 'Threat Intelligence',
@@ -123,6 +136,55 @@ TOOLS_METADATA = {
         'keywords': ['vulnerability', 'scanner', 'ai', 'security', 'assessment'],
         'icon': '🤖',
         'gradient': 'from-pink-400 to-rose-500'
+    },
+    'sqlmap': {
+        'name': 'SQL Injection Tester',
+        'description': 'Advanced SQL injection detection and exploitation tool like SQLMap',
+        'keywords': ['sql', 'injection', 'database', 'exploit', 'sqlmap'],
+        'icon': '💉',
+        'gradient': 'from-red-400 to-pink-500'
+    },
+    'aircrack': {
+        'name': 'WiFi Security Tester',
+        'description': 'Professional WiFi security testing using Aircrack-ng techniques',
+        'keywords': ['wifi', 'wireless', 'wpa', 'wep', 'aircrack'],
+        'icon': '📶',
+        'gradient': 'from-blue-400 to-cyan-500'
+    },
+    'wifite': {
+        'name': 'Wifite2 Automation',
+        'description': 'Automated WiFi penetration testing and security assessment',
+        'keywords': ['wifi', 'automation', 'wifite', 'penetration'],
+        'icon': '🎯',
+        'gradient': 'from-cyan-400 to-blue-500'
+    },
+    'fluxion': {
+        'name': 'Fluxion Social Engineering',
+        'description': 'WiFi social engineering and evil twin attack simulation',
+        'keywords': ['fluxion', 'evil twin', 'social engineering', 'wifi'],
+        'icon': '🕳️',
+        'gradient': 'from-purple-400 to-red-500'
+    },
+    'drozer': {
+        'name': 'Android Security Tester',
+        'description': 'Comprehensive Android application security testing with Drozer',
+        'keywords': ['android', 'mobile', 'drozer', 'app security'],
+        'icon': '🤖',
+        'gradient': 'from-green-400 to-teal-500'
+    },
+    'frida': {
+        'name': 'Frida Dynamic Analysis',
+        'description': 'Dynamic instrumentation and runtime analysis for mobile apps',
+        'keywords': ['frida', 'dynamic', 'instrumentation', 'runtime'],
+        'icon': '🔬',
+        'gradient': 'from-yellow-400 to-orange-500'
+    },
+    'mobsf': {
+        'name': 'Mobile Security Framework',
+        'description': 'Comprehensive mobile application security testing framework',
+        'keywords': ['mobsf', 'mobile', 'security', 'framework'],
+        'icon': '📱',
+        'gradient': 'from-indigo-400 to-purple-500'
     }
 }
 
@@ -306,6 +368,83 @@ def vulnscan_tool():
         except Exception as e:
             return render_template('tool_result.html', tool="AI Vulnerability Scanner", target=target, result=[f"Error: {str(e)}"])
     return render_template('tool_form.html', title="AI Vulnerability Scanner", description=TOOLS_METADATA['vulnscan']['description'])
+
+@app.route('/sqlmap', methods=['GET', 'POST'])
+def sqlmap_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = sql_injection_test(target)
+            return render_template('tool_result.html', tool="SQL Injection Tester", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="SQL Injection Tester", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="SQL Injection Tester", description=TOOLS_METADATA['sqlmap']['description'])
+
+@app.route('/aircrack', methods=['GET', 'POST'])
+def aircrack_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = wifi_security_test(target)
+            return render_template('tool_result.html', tool="WiFi Security Tester", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="WiFi Security Tester", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="WiFi Security Tester", description=TOOLS_METADATA['aircrack']['description'])
+
+@app.route('/wifite', methods=['GET', 'POST'])
+def wifite_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = wifi_security_test(target)  # Using same function for demo
+            return render_template('tool_result.html', tool="Wifite2 Automation", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="Wifite2 Automation", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="Wifite2 Automation", description=TOOLS_METADATA['wifite']['description'])
+
+@app.route('/fluxion', methods=['GET', 'POST'])
+def fluxion_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = wifi_security_test(target)  # Using same function for demo
+            return render_template('tool_result.html', tool="Fluxion Social Engineering", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="Fluxion Social Engineering", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="Fluxion Social Engineering", description=TOOLS_METADATA['fluxion']['description'])
+
+@app.route('/drozer', methods=['GET', 'POST'])
+def drozer_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = mobile_security_test(target)
+            return render_template('tool_result.html', tool="Android Security Tester", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="Android Security Tester", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="Android Security Tester", description=TOOLS_METADATA['drozer']['description'])
+
+@app.route('/frida', methods=['GET', 'POST'])
+def frida_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = mobile_security_test(target)  # Using same function for demo
+            return render_template('tool_result.html', tool="Frida Dynamic Analysis", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="Frida Dynamic Analysis", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="Frida Dynamic Analysis", description=TOOLS_METADATA['frida']['description'])
+
+@app.route('/mobsf', methods=['GET', 'POST'])
+def mobsf_tool():
+    if request.method == 'POST':
+        target = request.form.get('target')
+        try:
+            result = mobile_security_test(target)  # Using same function for demo
+            return render_template('tool_result.html', tool="Mobile Security Framework", target=target, result=result)
+        except Exception as e:
+            return render_template('tool_result.html', tool="Mobile Security Framework", target=target, result=[f"Error: {str(e)}"])
+    return render_template('tool_form.html', title="Mobile Security Framework", description=TOOLS_METADATA['mobsf']['description'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

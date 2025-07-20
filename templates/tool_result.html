@@ -59,42 +59,65 @@
                 {% if result %}
                     <div class="space-y-3">
                         {% for item in result %}
-                            <div class="result-item group">
-                                <div class="flex items-start space-x-3">
-                                    {% if "Error:" in item %}
-                                        <span class="text-red-400 text-lg">❌</span>
-                                        <span class="text-red-300">{{ item }}</span>
-                                    {% elif "HIGH:" in item %}
-                                        <span class="text-red-500 text-lg">🔴</span>
-                                        <span class="text-red-300">{{ item }}</span>
-                                    {% elif "MEDIUM:" in item %}
-                                        <span class="text-yellow-500 text-lg">🟡</span>
-                                        <span class="text-yellow-300">{{ item }}</span>
-                                    {% elif "LOW:" in item %}
-                                        <span class="text-blue-500 text-lg">🔵</span>
-                                        <span class="text-blue-300">{{ item }}</span>
-                                    {% elif item.startswith("✅") or item.startswith("🟢") %}
-                                        <span class="text-green-400">{{ item[:2] }}</span>
-                                        <span class="text-green-300">{{ item[2:] }}</span>
-                                    {% elif item.startswith("⚠️") or item.startswith("💡") %}
-                                        <span class="text-yellow-400">{{ item[:2] }}</span>
-                                        <span class="text-yellow-300">{{ item[2:] }}</span>
-                                    {% elif item.startswith("---") %}
-                                        <div class="w-full border-t border-cyber-blue/30 my-4"></div>
-                                        <h3 class="text-cyber-blue font-semibold text-lg">{{ item.replace("---", "").strip() }}</h3>
-                                    {% elif ":" in item and not item.startswith("http") %}
-                                        <span class="text-cyber-blue text-lg">📊</span>
-                                        <div>
-                                            {% set parts = item.split(":", 1) %}
-                                            <span class="text-cyan-300 font-semibold">{{ parts[0] }}:</span>
-                                            <span class="text-gray-300">{{ parts[1] }}</span>
-                                        </div>
+                            {% if item.startswith("$") or item.startswith("root@") or "SCANNER" in item or "SIMULATION" in item %}
+                                <!-- Terminal-style output for exploitation tools -->
+                                <div class="terminal-result group">
+                                    {% if item.startswith("$") %}
+                                        <span class="command-prompt">$</span> <span class="command-output">{{ item[1:].strip() }}</span>
+                                    {% elif item.startswith("root@") %}
+                                        <span class="command-prompt">{{ item }}</span>
+                                    {% elif "SCANNER" in item or "SIMULATION" in item %}
+                                        <span class="text-cyber-green font-bold">{{ item }}</span>
                                     {% else %}
-                                        <span class="text-cyber-blue text-lg">•</span>
-                                        <span class="text-gray-300 font-mono">{{ item }}</span>
+                                        <span class="command-output">{{ item }}</span>
                                     {% endif %}
                                 </div>
-                            </div>
+                            {% else %}
+                                <div class="result-item group">
+                                    <div class="flex items-start space-x-3">
+                                        {% if "Error:" in item %}
+                                            <span class="text-red-400 text-lg">❌</span>
+                                            <span class="text-red-300">{{ item }}</span>
+                                        {% elif "CRITICAL:" in item or "🔴" in item %}
+                                            <span class="text-red-500 text-lg">🔴</span>
+                                            <span class="text-red-300">{{ item }}</span>
+                                        {% elif "HIGH:" in item or "🟠" in item %}
+                                            <span class="text-orange-500 text-lg">🟠</span>
+                                            <span class="text-orange-300">{{ item }}</span>
+                                        {% elif "MEDIUM:" in item or "🟡" in item %}
+                                            <span class="text-yellow-500 text-lg">🟡</span>
+                                            <span class="text-yellow-300">{{ item }}</span>
+                                        {% elif "LOW:" in item or "🔵" in item %}
+                                            <span class="text-blue-500 text-lg">🔵</span>
+                                            <span class="text-blue-300">{{ item }}</span>
+                                        {% elif item.startswith("✅") or item.startswith("🟢") %}
+                                            <span class="text-green-400">{{ item[:2] }}</span>
+                                            <span class="text-green-300">{{ item[2:] }}</span>
+                                        {% elif item.startswith("⚠️") or item.startswith("💡") %}
+                                            <span class="text-yellow-400">{{ item[:2] }}</span>
+                                            <span class="text-yellow-300">{{ item[2:] }}</span>
+                                        {% elif item.startswith("=") %}
+                                            <div class="w-full border-t border-cyber-blue/50 my-4"></div>
+                                            <h3 class="text-cyber-blue font-semibold text-lg font-orbitron">{{ item.replace("=", "").strip() }}</h3>
+                                        {% elif item.startswith("-") %}
+                                            <div class="w-full border-t border-gray-600/30 my-2"></div>
+                                        {% elif ":" in item and not item.startswith("http") and not item.startswith("//") %}
+                                            <span class="text-cyber-blue text-lg">📊</span>
+                                            <div>
+                                                {% set parts = item.split(":", 1) %}
+                                                <span class="text-cyan-300 font-semibold">{{ parts[0] }}:</span>
+                                                <span class="text-gray-300">{{ parts[1] }}</span>
+                                            </div>
+                                        {% elif item.strip().startswith("•") or item.strip().startswith("→") %}
+                                            <span class="text-cyber-purple text-lg">{{ item[0] }}</span>
+                                            <span class="text-gray-300 font-mono">{{ item[1:].strip() }}</span>
+                                        {% else %}
+                                            <span class="text-cyber-blue text-lg">•</span>
+                                            <span class="text-gray-300 font-mono">{{ item }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
