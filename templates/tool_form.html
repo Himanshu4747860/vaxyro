@@ -6,14 +6,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} | Vaxyro</title>
   <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Background particles -->
+  <canvas id="bg-particles"></canvas>
+  
   <div class="form-container">
     <h2>{{ title }}</h2>
     <form method="POST">
-      <input name="target" type="text" placeholder="Enter target..." required>
-      <button type="submit">Scan</button>
+      <input name="target" type="text" placeholder="Enter target domain or IP..." required>
+      <div style="margin-top: 30px;">
+        <button type="submit">
+          <span>Initialize Scan</span>
+        </button>
+      </div>
     </form>
+    
+    <div style="margin-top: 40px;">
+      <a href="/" class="back-button">
+        ← Return to Command Center
+      </a>
+    </div>
   </div>
+
+  <script>
+    // Simple particle background
+    const canvas = document.getElementById('bg-particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function initParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      particles = [];
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2 + 0.5,
+          dx: (Math.random() - 0.5) * 0.5,
+          dy: (Math.random() - 0.5) * 0.5,
+          alpha: Math.random() * 0.5 + 0.3
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 245, 255, ${p.alpha})`;
+        ctx.fill();
+        
+        p.x += p.dx;
+        p.y += p.dy;
+        
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      
+      requestAnimationFrame(drawParticles);
+    }
+
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.zIndex = '-1';
+    canvas.style.opacity = '0.6';
+
+    window.addEventListener('resize', initParticles);
+    initParticles();
+    drawParticles();
+  </script>
 </body>
 </html>

@@ -1,56 +1,103 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ tool }} Result</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            font-size: 28px;
-            color: #333;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .back {
-            margin-top: 20px;
-            display: inline-block;
-            color: #fff;
-            background: #333;
-            padding: 8px 14px;
-            text-decoration: none;
-            border-radius: 6px;
-        }
-        .back:hover {
-            background: #555;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tool }} Results | Vaxyro</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>{{ tool }} Result for: {{ target }}</h1>
-    {% if result %}
-        <ul>
-            {% for item in result %}
-                <li><a href="http://{{ item }}" target="_blank">{{ item }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
-    <a href="/" class="back">🔙 Back to Home</a>
+    <!-- Background particles -->
+    <canvas id="bg-particles"></canvas>
+    
+    <div class="result-page">
+        <h1>{{ tool }} Results</h1>
+        <div style="background: rgba(26, 26, 46, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 245, 255, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
+            <p style="color: #00f5ff; font-family: 'Inter', sans-serif; margin: 0;">
+                <strong>Target:</strong> <span style="color: #39ff14;">{{ target }}</span>
+            </p>
+        </div>
+
+        {% if result %}
+            <div class="result-cards">
+                {% for item in result %}
+                    <div class="result-card">
+                        {% if item.startswith('http') or '.' in item %}
+                            <a href="{% if not item.startswith('http') %}http://{% endif %}{{ item }}" target="_blank" rel="noopener noreferrer">
+                                {{ item }}
+                            </a>
+                        {% else %}
+                            {{ item }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🔍</div>
+                <h3 style="color: rgba(255, 255, 255, 0.8); margin-bottom: 10px;">No Results Found</h3>
+                <p>The scan completed but no data was discovered for the target.</p>
+            </div>
+        {% endif %}
+        
+        <a href="/" class="back-button">
+            ← Return to Command Center
+        </a>
+    </div>
+
+    <script>
+        // Simple particle background
+        const canvas = document.getElementById('bg-particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3,
+                    alpha: Math.random() * 0.4 + 0.2
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let p of particles) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 245, 255, ${p.alpha})`;
+                ctx.fill();
+                
+                p.x += p.dx;
+                p.y += p.dy;
+                
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            }
+            
+            requestAnimationFrame(drawParticles);
+        }
+
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.zIndex = '-1';
+        canvas.style.opacity = '0.5';
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        drawParticles();
+    </script>
 </body>
 </html>

@@ -1,67 +1,262 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap');
 
-body {
+* {
   margin: 0;
   padding: 0;
-  background: linear-gradient(120deg, #1f2937, #111827);
-  font-family: 'Orbitron', sans-serif;
-  color: #f0f0f0;
-  text-align: center;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', monospace;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .form-container, .result-page {
-  padding: 50px 20px;
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.form-container {
+  text-align: center;
+}
+
+.form-container h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #00f5ff, #8b5cf6, #39ff14);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+}
+
+.form-container form {
+  background: rgba(26, 26, 46, 0.4);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.form-container form:hover {
+  border-color: #00f5ff;
+  box-shadow: 0 25px 50px rgba(0, 245, 255, 0.2);
 }
 
 input[type="text"] {
-  padding: 10px;
-  width: 300px;
+  width: 100%;
+  max-width: 500px;
+  padding: 15px 20px;
   font-size: 16px;
-  margin: 20px auto;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 15px cyan;
-  display: block;
+  font-family: 'Inter', sans-serif;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  border-radius: 12px;
+  color: #ffffff;
+  margin: 20px 0;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #00f5ff;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 button {
-  padding: 10px 25px;
-  background: #06b6d4;
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #00f5ff, #8b5cf6);
   color: white;
   border: none;
-  border-radius: 10px;
-  font-weight: bold;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Orbitron', monospace;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
 }
 
 button:hover {
-  background: #0ea5e9;
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 245, 255, 0.4);
+}
+
+button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+.result-page {
+  text-align: left;
+}
+
+.result-page h1 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: #00f5ff;
+  text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
 }
 
 .result-cards {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  gap: 15px;
   margin-top: 30px;
 }
 
 .result-card {
-  background: #0f172a;
-  border: 1px solid #3b82f6;
-  padding: 15px;
-  border-radius: 12px;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-  font-size: 17px;
+  background: rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.result-card:hover {
+  border-color: #00f5ff;
+  box-shadow: 0 15px 40px rgba(0, 245, 255, 0.2);
+  transform: translateX(10px);
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #00f5ff, #8b5cf6);
+  border-radius: 2px 0 0 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.result-card:hover::before {
+  opacity: 1;
+}
+
+.result-card a {
+  color: #00f5ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.result-card a:hover {
+  color: #39ff14;
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
 }
 
 .back-button {
-  margin-top: 30px;
+  margin-top: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #00f5ff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 12px 24px;
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(26, 26, 46, 0.4);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  border-color: #00f5ff;
+  box-shadow: 0 10px 20px rgba(0, 245, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* No results state */
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Loading animation */
+.loading {
   display: inline-block;
-  color: #3b82f6;
-  text-decoration: underline;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 245, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #00f5ff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .form-container h2 {
+    font-size: 2rem;
+  }
+  
+  .form-container form {
+    padding: 30px 20px;
+  }
+  
+  input[type="text"] {
+    font-size: 14px;
+  }
+  
+  button {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+  
+  .result-page h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
