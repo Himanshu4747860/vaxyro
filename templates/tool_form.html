@@ -2,85 +2,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title }} | Vaxyro</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Vaxyro Cybersecurity Toolkit</title>
+    <meta name="description" content="{{ description }} - Professional cybersecurity tool by Vaxyro">
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-blue': '#00f5ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-green': '#39ff14',
+                        'dark-bg': '#0a0a0f',
+                        'card-bg': '#1a1a2e'
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'monospace'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-  <!-- Background particles -->
-  <canvas id="bg-particles"></canvas>
-  
-  <div class="form-container">
-    <h2>{{ title }}</h2>
-    <form method="POST">
-      <input name="target" type="text" placeholder="Enter target domain or IP..." required>
-      <div style="margin-top: 30px;">
-        <button type="submit">
-          <span>Initialize Scan</span>
-        </button>
-      </div>
-    </form>
+<body class="bg-dark-bg text-white font-inter min-h-screen">
+    <!-- Background Animation -->
+    <canvas id="bg" class="fixed inset-0 z-0"></canvas>
     
-    <div style="margin-top: 40px;">
-      <a href="/" class="back-button">
-        ← Return to Command Center
-      </a>
+    <div class="relative z-10 min-h-screen flex flex-col justify-center py-12 px-4">
+        <div class="max-w-2xl mx-auto w-full">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue to-cyber-purple mb-4 font-orbitron">
+                    {{ title }}
+                </h1>
+                <p class="text-gray-300 text-lg leading-relaxed max-w-xl mx-auto">
+                    {{ description }}
+                </p>
+            </div>
+
+            <!-- Main Form -->
+            <div class="form-container">
+                <form method="POST" id="toolForm" class="space-y-6">
+                    <div>
+                        <label for="target" class="block text-sm font-semibold text-gray-300 mb-2">
+                            Target (Domain/IP Address)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="target" 
+                            name="target" 
+                            required 
+                            class="form-input" 
+                            placeholder="e.g., example.com or 192.168.1.1"
+                            autocomplete="off"
+                        >
+                        <p class="text-xs text-gray-400 mt-2">
+                            Enter a domain name or IP address for analysis
+                        </p>
+                    </div>
+                    
+                    <button type="submit" class="form-button w-full" id="submitBtn">
+                        <span id="btnText">🚀 Launch Analysis</span>
+                        <span id="btnLoader" class="hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Analyzing...
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Security Notice -->
+                <div class="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-yellow-500 text-xl">⚠️</span>
+                        <div>
+                            <h3 class="text-yellow-500 font-semibold text-sm">Ethical Use Only</h3>
+                            <p class="text-gray-300 text-xs mt-1">
+                                Only test on systems you own or have explicit permission to test. 
+                                Unauthorized testing may violate laws and terms of service.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="text-center mt-8">
+                <a href="/" class="back-button inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Return to Command Center
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Simple particle background
-    const canvas = document.getElementById('bg-particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+    <script>
+        // Background animation
+        const canvas = document.getElementById('bg');
+        const ctx = canvas.getContext('2d');
 
-    function initParticles() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      
-      particles = [];
-      for (let i = 0; i < 50; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 2 + 0.5,
-          dx: (Math.random() - 0.5) * 0.5,
-          dy: (Math.random() - 0.5) * 0.5,
-          alpha: Math.random() * 0.5 + 0.3
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 50;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 245, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Form handling
+        document.getElementById('toolForm').addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
         });
-      }
-    }
 
-    function drawParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 245, 255, ${p.alpha})`;
-        ctx.fill();
-        
-        p.x += p.dx;
-        p.y += p.dy;
-        
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-      }
-      
-      requestAnimationFrame(drawParticles);
-    }
-
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.zIndex = '-1';
-    canvas.style.opacity = '0.6';
-
-    window.addEventListener('resize', initParticles);
-    initParticles();
-    drawParticles();
-  </script>
+        // Input validation
+        document.getElementById('target').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (value.length > 0) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50');
+            }
+        });
+    </script>
 </body>
 </html>

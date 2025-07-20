@@ -3,6 +3,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-24_05"
+packages = ["cacert", "iana-etc", "imagemagickBig", "libmaxminddb", "nmap", "sox", "tcpdump", "wireshark"]
 
 [unitTest]
 language = "python3"
@@ -24,3 +25,15 @@ externalPort = 5000
 [[ports]]
 localPort = 8080
 externalPort = 80
+
+[workflows]
+runButton = "Vaxyro Server"
+
+[[workflows.workflow]]
+name = "Vaxyro Server"
+author = 19925023
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python app.py"
