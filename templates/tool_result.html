@@ -1,42 +1,56 @@
-<!-- templates/tool_result.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ tool }} Results | Vaxyro</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background: radial-gradient(#0f172a, #020617);
-      font-family: 'Orbitron', sans-serif;
-      color: #ffffff;
-      padding: 2rem;
-    }
-    a {
-      color: #0ff;
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>{{ tool }} Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back {
+            margin-top: 20px;
+            display: inline-block;
+            color: #fff;
+            background: #333;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .back:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
-  <h1 class="text-3xl text-cyan-400 mb-4">{{ tool }} Results</h1>
-  <p class="text-lg text-cyan-200 mb-6">Target: {{ target }}</p>
-
-  <ul class="space-y-2">
-    {% for item in result %}
-      <li>
-        {% if tool == "Subdomain Finder" and item.startswith('http') %}
-          <a href="{{ item }}" target="_blank" rel="noopener noreferrer">{{ item }}</a>
-        {% else %}
-          {{ item }}
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-
-  <div class="mt-6">
-    <a href="/" class="text-cyan-300 hover:underline">← Back to Home</a>
-  </div>
+    <h1>{{ tool }} Result for: {{ target }}</h1>
+    {% if result %}
+        <ul>
+            {% for item in result %}
+                <li><a href="http://{{ item }}" target="_blank">{{ item }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    <a href="/" class="back">🔙 Back to Home</a>
 </body>
 </html>
